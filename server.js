@@ -70,7 +70,12 @@ app.get("/fruits", async (req, res) => {
 app.get("/fruits/:id", async (req, res) => {
  const foundFruit = await Fruit.findById(req.params.id);
  res.render("show.ejs", { fruit: foundFruit });
-});
+});// this is a show route
+
+app.get("/fruits/:id/edit", async (req, res) => {
+  const foundFruit = await Fruit.findById(req.params.id);
+  res.render("edit.ejs", { fruit: foundFruit });
+});// this is the edit route
 
 // POST /fruits route
 app.post("/fruits", async (req, res) => {
