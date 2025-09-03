@@ -6,6 +6,8 @@ console.log(process.env)
 const express = require('express');
 const mongoose = require("mongoose"); // require package
 const app = express();
+const methodOverride = require("method-override"); // new
+const morgan = require("morgan"); //new
 const port = process.env.PORT
 // Connect to MongoDB using the connection string in the .env file
 mongoose.connect(process.env.MONGODB_URI);
@@ -38,17 +40,36 @@ app.use(express.urlencoded({ extended: false }));// this is a built in url funct
 // extended = false because we want to parse the data as key-value pairs,
 // false is the qs library (more limitting)
 // true is the querystring library
+// Mount it along with our other middleware, ABOVE the routes
+app.use(express.urlencoded({ extended: false }));
+app.use(methodOverride("_method")); // new
+app.use(morgan("dev")); //new
 
+
+///////////////////
 
 
 // GET /landing page
 app.get("/", async (req, res) => {
-  res.render("index.ejs");
+      const allFruits = await Fruit.find();
+
+  res.render("index.ejs", { fruits: allFruits });
 });
 
 // GET /fruits/new page
 app.get("/fruits/new", (req, res) => {
     res.render("fruits/new.ejs");
+});
+
+app.get("/fruits", async (req, res) => {
+  const allFruits = await Fruit.find();
+  console.log(allFruits); // log the fruits!
+  res.render("index.ejs", { fruits: allFruits });
+});
+
+app.get("/fruits/:id", async (req, res) => {
+ const foundFruit = await Fruit.findById(req.params.id);
+ res.render("show.ejs", { fruit: foundFruit });
 });
 
 // POST /fruits route
@@ -70,6 +91,13 @@ console.log(newFruit);
  }
 res.redirect("/fruits/new");
 });
+
+
+
+app.delete("/fruits/:fruitId", (req, res) => {
+  res.send("This is the delete route");
+});
+
 
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
