@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>show page</title>
+       <link rel="stylesheet" href="/stylesheets/style.css" />
+
 </head>
 <body>
     <h1><%= fruit.name %></h1>
@@ -16,8 +18,10 @@
 <form action="/fruits/<%=fruit._id%>?_method=DELETE" method="POST">
   <button type="submit">Delete <%= fruit.name %></button>
 </form>
-<a href="/fruits">Back to Fruits</a>
-<a href="/fruits/<%= fruit._id %>/edit">Edit <%= fruit.name %></a>
+ <a class="fruits-index-link" href="/fruits">
+   <div class="index-link-text">Back to Fruits</div>
+ </a><a class="fruits-edit-link" href="/fruits/<%= fruit._id %>/edit">Edit <%= fruit.name %></a>
+ 
 
 </body>
 </html>
